@@ -1,4 +1,5 @@
 import bodyparser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import cors, { type CorsOptions } from 'cors';
 import { type Application, type Request, type Response } from 'express';
 import helment from 'helmet';
@@ -32,6 +33,7 @@ const expressLoader = (app: Application) => {
   app.use(
     morgan('dev', { stream: { write: (message) => logger.info(message) } })
   );
+  app.use(cookieParser());
   app.use('/api', routes);
 
   app.get('/', (_req, res) =>

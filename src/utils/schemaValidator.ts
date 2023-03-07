@@ -3,7 +3,7 @@ import type { AnyZodObject } from 'zod';
 
 import formatErrors from './formatErrors';
 
-const zodValidator =
+const schemaValidator =
   (schema: AnyZodObject) =>
   (req: Request, res: Response, next: NextFunction) => {
     const result = schema.strict().safeParse(req.body);
@@ -16,4 +16,4 @@ const zodValidator =
       .json({ message: formatErrors(result.error.format()) });
   };
 
-export default zodValidator;
+export default schemaValidator;

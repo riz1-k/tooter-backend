@@ -1,12 +1,14 @@
 import type { NextFunction, Request, Response } from 'express';
-import mongoose from 'mongoose';
-import { RateLimiterMongo } from 'rate-limiter-flexible';
+import {
+  type IRateLimiterMongoOptions,
+  RateLimiterMongo,
+} from 'rate-limiter-flexible';
 
-import env from '../../loaders/env';
+import prisma from '../../loaders/prisma';
 
-const mongoConn = mongoose.createConnection(env.DATABASE_URL);
+const mongoConn = prisma.$connect();
 
-const opts = {
+const opts: IRateLimiterMongoOptions = {
   storeClient: mongoConn,
   tableName: 'rateLimits',
   points: 100,

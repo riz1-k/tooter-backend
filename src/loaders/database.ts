@@ -1,15 +1,9 @@
-import { connect, set } from 'mongoose';
-
 import logger from '../utils/logger';
-import env from './env';
+import prisma from './prisma';
 
 const connectToDatabase = async () => {
   try {
-    set('strictQuery', true);
-    if (env.NODE_ENV === 'development') {
-      set('debug', true);
-    }
-    await connect(env.DATABASE_URL);
+    await prisma.$connect();
     console.clear();
     logger.info('🚀 Database connected');
   } catch (err) {
