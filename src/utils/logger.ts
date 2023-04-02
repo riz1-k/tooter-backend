@@ -1,19 +1,6 @@
-import 'winston-mongodb';
-
 import winston from 'winston';
 
 import env from '../loaders/env';
-
-const mongoTransport = new winston.transports.MongoDB({
-  // db: 'mongodb+srv://cartibuy:emG8aF7Cr6IVE3tv@cartibuy.uw8m1ik.mongodb.net/cartibuy_db?retryWrites=true&w=majority',
-  db: env.DATABASE_URL,
-  collection: 'server_logs',
-  level: 'error',
-  label: 'core_server',
-  options: {
-    useUnifiedTopology: true,
-  },
-});
 
 const logger = winston.createLogger({
   levels: winston.config.syslog.levels,
@@ -35,7 +22,6 @@ const logger = winston.createLogger({
         })
       ),
     }),
-    mongoTransport,
   ],
   format: winston.format.combine(
     winston.format.json(),
@@ -44,5 +30,23 @@ const logger = winston.createLogger({
     })
   ),
 });
+
+if (env.NODE_ENV === 'production') {
+  logger.add(
+    new winston.transports.File({
+      filename: 'logs/error.log',
+      level: 'error',
+    })
+  );
+  logger.add(
+    new winston.transports.File({
+      filename: 'logs/combined.log',
+    })
+  );
+}
+
+if (env.NODE_ENV === 'development') {
+  logger.debug('Logging initialized at debug level');
+}
 
 export default logger;

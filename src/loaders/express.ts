@@ -5,7 +5,8 @@ import { type Application, type Request, type Response } from 'express';
 import helment from 'helmet';
 import morgan from 'morgan';
 
-import routes from '../apis/routes';
+// import routes from '../apis/routes';
+// import routes from '../apis/routes';
 import logger from '../utils/logger';
 
 const expressLoader = (app: Application) => {
@@ -34,7 +35,7 @@ const expressLoader = (app: Application) => {
     morgan('dev', { stream: { write: (message) => logger.info(message) } })
   );
   app.use(cookieParser());
-  app.use('/api', routes);
+  // app.use('/api', routes);
 
   app.get('/', (_req, res) =>
     res
