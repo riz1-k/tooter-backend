@@ -1,12 +1,12 @@
 import { type Application } from 'express';
 
-// import connectToDatabase from './database';
+import connectToDatabase from './database';
 import { verifyEnv } from './env';
 import expressLoader from './express';
 
 const mainLoader = async (app: Application) => {
   verifyEnv();
-  // await connectToDatabase();
+  await connectToDatabase();
   expressLoader(app);
 };
 
