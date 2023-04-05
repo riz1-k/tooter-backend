@@ -12,6 +12,7 @@ const envSchema = z.object({
   DATABASE_URL: z.string(),
   PORT: z.number(),
   JWT_SECRET: z.string(),
+  COOKIE_SECRET: z.string(),
 });
 
 const envs = {
@@ -19,6 +20,7 @@ const envs = {
   DATABASE_URL: process.env.DATABASE_URL,
   PORT: Number(process.env.PORT),
   JWT_SECRET: process.env.JWT_SECRET,
+  COOKIE_SECRET: process.env.COOKIE_SECRET,
 };
 
 const serverEnv = envSchema.safeParse(envs);
