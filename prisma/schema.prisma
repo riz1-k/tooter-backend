@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,6 +14,7 @@ model User {
   id Int         @id @default(autoincrement())
   username String @unique
   displayName String
+  email String @unique
   password String
   tweets Tweet[]
   followers User[] @relation("FollowRelation")
@@ -75,4 +79,3 @@ model Retweet {
   @@index([tweetId])
   @@index([userId])
 }
-
