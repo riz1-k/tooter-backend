@@ -5,6 +5,8 @@ const userRegisterValidator = z.object({
   displayName: z.string().min(3).max(30),
   email: z.string().email(),
   password: z.string().min(6).max(50),
+  dob: z.coerce.date().max(new Date()),
+  phoneNumber: z.string().length(10),
 });
 
 const userLoginValidator = z.object({

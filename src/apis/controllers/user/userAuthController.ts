@@ -1,9 +1,8 @@
 import { compare, hash } from 'bcrypt';
 import { type Request, type Response } from 'express';
-import { sign } from 'jsonwebtoken';
 
-import env from '../../../loaders/env';
 import prisma from '../../../loaders/prisma';
+import generateToken from '../../../utils/helpers/generateToken';
 import {
   type TypeUserLoginValidator,
   type TypeUserRegisterValidator,
@@ -11,32 +10,26 @@ import {
 
 const userRegister = async (req: Request, res: Response) => {
   try {
-    const { username, displayName, email, password } =
-      req.body as TypeUserRegisterValidator;
+    const { password } = req.body as TypeUserRegisterValidator;
     const hashedPassword = await hash(password, 10);
     const user = await prisma.user.create({
       data: {
-        username,
-        displayName,
-        email,
+        ...req.body,
         password: hashedPassword,
       },
-    });
-    const token = sign(
-      {
-        id: user.id,
-        username: user.username,
-        displayName: user.displayName,
+      select: {
+        id: true,
       },
-      env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
+    });
+
+    const token = generateToken(user);
 
     res.cookie('token', token, {
       httpOnly: true,
       sameSite: 'strict',
       secure: true,
       maxAge: 86400,
+      signed: true,
     });
 
     res.status(201).json({ message: 'User created successfully' });
@@ -54,6 +47,10 @@ const userLogin = async (req: Request, res: Response) => {
       where: {
         username: usernameOrEmail,
       },
+      select: {
+        id: true,
+        password: true,
+      },
     });
 
     if (!user) {
@@ -68,15 +65,7 @@ const userLogin = async (req: Request, res: Response) => {
       return;
     }
 
-    const token = sign(
-      {
-        id: user.id,
-        username: user.username,
-        displayName: user.displayName,
-      },
-      env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
+    const token = generateToken({ id: user.id });
 
     res.cookie('token', token, {
       httpOnly: true,

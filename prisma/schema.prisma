@@ -14,43 +14,46 @@ model User {
   id Int         @id @default(autoincrement())
   username String @unique
   displayName String
+  phoneNumber String @unique
+  dob DateTime
   email String @unique
   password String
-  tweets Tweet[]
+  toots Toot[]
   followers User[] @relation("FollowRelation")
   following User[] @relation("FollowRelation")
   likes Like[]
   comments Comment[]
-  retweets Retweet[]
+  retoots Retoot[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Tweet {
+model Toot {
   id Int       @id @default(autoincrement())
   content String
+  sensitiveContent Boolean?
+  // media_ids Media[]
   author User   @relation(fields : [authorId], references : [id])
   authorId Int
   likes Like[]
   comments Comment[]
-  retweets Retweet[]
+  retoots Retoot[]
+  visibility String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([authorId])
 }
+
+
 
 model Like {
   id Int   @id @default(autoincrement())
   user User @relation(fields : [userId], references : [id])
   userId Int
-  tweet Tweet @relation(fields : [tweetId], references : [id])
-  tweetId Int
+  toot Toot @relation(fields : [tootId], references : [id])
+  tootId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([tweetId])
 }
 
 model Comment {
@@ -58,24 +61,30 @@ model Comment {
   content String
   author User @relation(fields : [authorId], references : [id])
   authorId Int
-  tweet Tweet @relation(fields : [tweetId], references : [id])
-  tweetId Int
+  toot Toot @relation(fields : [tootId], references : [id])
+  tootId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([authorId])
-  @@index([tweetId])
 }
 
-model Retweet {
+model Retoot {
   id Int     @id @default(autoincrement())
-  tweet Tweet @relation(fields : [tweetId], references : [id])
-  tweetId Int
+  toot Toot @relation(fields : [tootId], references : [id])
+  tootId Int
   user User @relation(fields : [userId], references : [id])
   userId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([tweetId])
-  @@index([userId])
 }
+
+
+// model Media {
+//   id Int   @id @default(autoincrement())
+//   url String
+//   type String
+//   toot Toot @relation(fields : [tootId], references : [id])
+//   tootId Int
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
