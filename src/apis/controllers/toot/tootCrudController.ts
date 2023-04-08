@@ -13,7 +13,7 @@ const createNewToot = async (req: Request, res: Response) => {
 
     const user = await prisma.user.findUnique({
       where: {
-        id: userId,
+        id: userId?.id,
       },
       select: {
         id: true,
@@ -54,7 +54,7 @@ const updateToot = async (req: Request, res: Response) => {
     const tootId = req.params.id;
     const user = await prisma.user.findUnique({
       where: {
-        id: userId,
+        id: userId?.id,
       },
       select: {
         id: true,
@@ -107,7 +107,7 @@ const deleteToot = async (req: Request, res: Response) => {
     const tootId = req.params.id;
     const user = await prisma.user.findUnique({
       where: {
-        id: userId,
+        id: userId?.id,
       },
       select: {
         id: true,

@@ -13,6 +13,11 @@ const envSchema = z.object({
   PORT: z.number(),
   JWT_SECRET: z.string(),
   COOKIE_SECRET: z.string(),
+  AWS_SECRET_ACCESS_KEY: z.string(),
+  AWS_ACCESS_KEY: z.string(),
+  WASABI_ACCESS_KEY: z.string(),
+  WASABI_SECRET_ACCESS_KEY: z.string(),
+  WASABI_BUCKET_NAME: z.string(),
 });
 
 const envs = {
@@ -21,6 +26,11 @@ const envs = {
   PORT: Number(process.env.PORT),
   JWT_SECRET: process.env.JWT_SECRET,
   COOKIE_SECRET: process.env.COOKIE_SECRET,
+  AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+  AWS_ACCESS_KEY: process.env.AWS_ACCESS_KEY,
+  WASABI_ACCESS_KEY: process.env.WASABI_ACCESS_KEY,
+  WASABI_SECRET_ACCESS_KEY: process.env.WASABI_SECRET_ACCESS_KEY,
+  WASABI_BUCKET_NAME: process.env.WASABI_BUCKET_NAME,
 };
 
 const serverEnv = envSchema.safeParse(envs);

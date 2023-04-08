@@ -2,6 +2,8 @@
 
 declare namespace Express {
   export interface Request {
-    user?: import('@prisma/client').User['id'];
+    user?: {
+      id: import('@prisma/client').User['id'];
+    };
   }
 }

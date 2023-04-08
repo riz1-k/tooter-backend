@@ -3,5 +3,6 @@
 /build
 .pnpm-debug.log*
 .env
+.yarn-error.log*
 
 

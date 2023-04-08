@@ -18,9 +18,12 @@ model User {
   dob DateTime
   email String @unique
   password String
+  profilePicture ProfilePicture?
+  bio String?
   toots Toot[]
   followers User[] @relation("FollowRelation")
   following User[] @relation("FollowRelation")
+  isVerified Boolean @default(false)
   likes Like[]
   comments Comment[]
   retoots Retoot[]
@@ -28,11 +31,20 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+
+model ProfilePicture {
+  id Int @id @default(autoincrement())
+  url String
+  fileName String
+  user User @relation(fields: [userId], references: [id])
+  userId Int @unique
+}
+
 model Toot {
   id Int       @id @default(autoincrement())
   content String
   sensitiveContent Boolean?
-  // media_ids Media[]
+  media_ids TootMedia[]
   author User   @relation(fields : [authorId], references : [id])
   authorId Int
   likes Like[]
@@ -79,12 +91,12 @@ model Retoot {
 }
 
 
-// model Media {
-//   id Int   @id @default(autoincrement())
-//   url String
-//   type String
-//   toot Toot @relation(fields : [tootId], references : [id])
-//   tootId Int
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
+model TootMedia {
+  id Int   @id @default(autoincrement())
+  url String
+  type String
+  toot Toot @relation(fields : [tootId], references : [id])
+  tootId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
